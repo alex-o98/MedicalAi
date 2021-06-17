@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">MedicalAi</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Medical AI</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Nav bar</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Disease detection</string>
+    <string name="menu_gallery">Symptom checker</string>
+    <string name="menu_slideshow">User manual</string>
+    <string name="menu_tools">Settings</string>
+</resources>

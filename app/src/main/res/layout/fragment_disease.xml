@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:rotation="0">
+
+    <Button
+        android:id="@+id/sendButton"
+        android:layout_width="393dp"
+        android:layout_height="45dp"
+        android:layout_marginBottom="76dp"
+        android:background="@drawable/button_style_one"
+        android:fontFamily="@font/roboto"
+        android:text="Send picture"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="gone" />
+
+    <Button
+        android:id="@+id/cancelButton"
+        android:layout_width="393dp"
+        android:layout_height="45dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/button_style_one"
+        android:fontFamily="@font/roboto"
+
+        android:text="@android:string/cancel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="gone" />
+
+    <Button
+        android:id="@+id/cameraButton"
+        android:layout_width="393dp"
+        android:layout_height="45dp"
+        android:layout_marginBottom="76dp"
+        android:background="@drawable/button_style_one"
+        android:fontFamily="@font/roboto"
+        android:text="Take picture"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible" />
+
+    <Button
+        android:id="@+id/uploadButton"
+        android:layout_width="393dp"
+        android:layout_height="45dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/button_style_one"
+        android:fontFamily="@font/roboto"
+        android:text="Upload from gallery"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible" />
+
+
+    <ImageView
+        android:id="@+id/imageTaken"
+        android:layout_width="377dp"
+        android:layout_height="363dp"
+        android:layout_marginTop="52dp"
+        android:rotation="0"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="18dp"
+        app:layout_constraintBottom_toTopOf="@+id/cameraButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageTaken"
+        app:layout_constraintVertical_bias="0.133">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/resultTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto"
+                android:textAlignment="center"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
