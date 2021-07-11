@@ -20,42 +20,53 @@ import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
-import com.example.medicalai.MainActivity;
 import com.example.medicalai.R;
+import com.example.medicalai.UploadImage;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static android.app.Activity.RESULT_OK;
+import static com.example.medicalai.MainActivity.HOST;
 
 public class DiseaseFragment extends Fragment {
 
 
-    private Button cameraButton,uploadButton,sendButton,cancelButton;
-    private ImageView imgTaken;
+    public static Button cameraButton,uploadButton,sendButton,cancelButton;
+    public static ImageView imgTaken;
     private Uri photoURI;
     private File photoFile = null;
+    public static TextView resultText;
 
-    private TextView resultText;
+    public static ImageView imgReturned;
+    public static TextView accuracy;
+    public static TextView returnString;
+
 
     private Bitmap bitmap;
 
-    private String host;
+    public static int fragm = 0; // 0 - Root, 1 - result
+    public static View root;
+    public static View result;
+    public static ViewGroup cont;
+
+    private String SERVER = HOST;
     private final int CAMERA_CODE = 10, GALLERY_CODE = 11;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull final LayoutInflater inflater,
+                             final ViewGroup container, Bundle savedInstanceState) {
 
-        View root = inflater.inflate(R.layout.fragment_disease, container, false);
+        cont = container;
+        root = inflater.inflate(R.layout.fragment_disease,container,false);
+        result = inflater.inflate(R.layout.fragment_output,null,false);
 
         cameraButton = root.findViewById(R.id.cameraButton);
         uploadButton = root.findViewById(R.id.uploadButton);
 
         sendButton = root.findViewById(R.id.sendButton);
         cancelButton = root.findViewById(R.id.cancelButton);
-
-        resultText = root.findViewById(R.id.resultTextView);
+        resultText = root.findViewById(R.id.resultText);
 
         cameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,8 +87,9 @@ public class DiseaseFragment extends Fragment {
                     bitmap = ((BitmapDrawable) imgTaken.getDrawable()).getBitmap();
 
                     if(checkImage(bitmap)) {
-                        host = updateHost();
-                        UploadImage upload = new UploadImage(bitmap,host,resultText);
+                        // We also send both views, in order to activate them accordingly.
+                        UploadImage upload = new UploadImage(bitmap,HOST + "/sendImage",resultText, getActivity(), container, root, result);
+
                         upload.execute();
 
                     }else{
@@ -98,20 +110,28 @@ public class DiseaseFragment extends Fragment {
 
         imgTaken = root.findViewById(R.id.imageTaken);
 
+        // Now it comes the output part initialization and processing
+        imgReturned = result.findViewById(R.id.returnedImage);
+
+        accuracy = result.findViewById(R.id.accuracyTextView);
+        returnString = result.findViewById(R.id.resultStringTextView);
+
+
+
+
         return root;
 
     }
-    private String updateHost(){
-        String tmp = ((MainActivity)this.getActivity()).getHOST() + "/sendImage";
-        return tmp;
-    }
+
+
+
     private void hideButtons(){
         sendButton.setVisibility(View.VISIBLE);
         cancelButton.setVisibility(View.VISIBLE);
         cameraButton.setVisibility(View.GONE);
         uploadButton.setVisibility(View.GONE);
-
     }
+
     private boolean checkImage(Bitmap bmp){
         if(bmp.getWidth() == bmp.getHeight()){
             if(bmp.getWidth()>128 && bmp.getHeight() >128){
@@ -123,7 +143,7 @@ public class DiseaseFragment extends Fragment {
 
 
     }
-    private void resetPicture() {
+    public void resetPicture() {
         // Reset the image view
         imgTaken.setImageResource(android.R.color.transparent);
 
@@ -132,9 +152,9 @@ public class DiseaseFragment extends Fragment {
         cancelButton.setVisibility(View.GONE);
         cameraButton.setVisibility(View.VISIBLE);
         uploadButton.setVisibility(View.VISIBLE);
+
+        // Reset the text
         resultText.setText("");
-
-
     }
     private void updateViewFromUri(Uri uri){
         try{
@@ -148,6 +168,7 @@ public class DiseaseFragment extends Fragment {
     private void selectPicture(){
         // We rotate the ImageView before selecting it
         imgTaken.setRotation(0);
+        imgReturned.setRotation(0);
         Intent selectPictureIntent = new Intent(Intent.ACTION_GET_CONTENT);
         selectPictureIntent.setType("image/*");
         startActivityForResult(Intent.createChooser(selectPictureIntent,"Select a picture"),GALLERY_CODE);
@@ -155,7 +176,7 @@ public class DiseaseFragment extends Fragment {
     private void takePicture() {
         // We rotate the ImageView before taking a picture
         imgTaken.setRotation(90);
-
+        imgReturned.setRotation(90);
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         try {
             photoFile = null;

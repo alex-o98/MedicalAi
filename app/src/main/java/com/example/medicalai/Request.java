@@ -1,6 +1,4 @@
-package com.example.medicalai.ui;
-
-import android.util.Log;
+package com.example.medicalai;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
