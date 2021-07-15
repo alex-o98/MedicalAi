@@ -1,9 +1,12 @@
 package com.example.medicalai;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -12,15 +15,76 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import static com.example.medicalai.ui.disease.DiseaseFragment.cameraButton;
+import static com.example.medicalai.ui.disease.DiseaseFragment.cancelButton;
+import static com.example.medicalai.ui.disease.DiseaseFragment.cont;
+import static com.example.medicalai.ui.disease.DiseaseFragment.fragm;
+import static com.example.medicalai.ui.disease.DiseaseFragment.imgTaken;
+import static com.example.medicalai.ui.disease.DiseaseFragment.manual;
+import static com.example.medicalai.ui.disease.DiseaseFragment.profile;
+import static com.example.medicalai.ui.disease.DiseaseFragment.result;
+import static com.example.medicalai.ui.disease.DiseaseFragment.resultText;
+import static com.example.medicalai.ui.disease.DiseaseFragment.root;
+import static com.example.medicalai.ui.disease.DiseaseFragment.sendButton;
+import static com.example.medicalai.ui.disease.DiseaseFragment.uploadButton;
+
 // Importing the contents from the DiseaseFragment so we can reset it
-import static com.example.medicalai.ui.disease.DiseaseFragment.*;
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
 
     public static String HOST = "http://192.168.100.2:5000";
+    public static FloatingActionButton cameraButton2;
 
+    public BottomNavigationView.OnNavigationItemSelectedListener selectedListener= new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.miHome:
+                    Log.d("Nav","Home");
+                    if(fragm != 0){
+                        cont.addView(root);
+                        cont.removeView(manual);
+                        cont.removeView(profile);
+                        fragm = 0;
+                    }
+                    break;
+                case R.id.miManual:
+                    Log.d("Nav","miManual");
+                    if(fragm != 1){
+                        cont.addView(manual);
+                        cont.removeView(root);
+                        cont.removeView(profile);
+                        fragm = 1;
+                    }
+
+                    break;
+                case R.id.miGallery:
+                    if(fragm != 2){
+                        cont.addView(root);
+                        cont.removeView(manual);
+                        cont.removeView(profile);
+                        fragm = 2;
+                    }
+                    break;
+                case R.id.miProfile:
+                    if(fragm != 3){
+                        cont.addView(profile);
+                        cont.removeView(manual);
+                        cont.removeView(root);
+                        fragm = 3;
+                    }
+                    break;
+            }
+            return true;
+        }
+
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +92,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavView);
+        bottomNavigationView.setBackground(null);
+        bottomNavigationView.getMenu().getItem(2).setEnabled(false);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(selectedListener);
+
+
+        cameraButton2 = (FloatingActionButton) findViewById(R.id.cameraFloatingButton);
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         // Passing each menu ID as a set of Ids because each

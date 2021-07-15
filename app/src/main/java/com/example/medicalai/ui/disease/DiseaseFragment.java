@@ -29,6 +29,7 @@ import java.util.Date;
 
 import static android.app.Activity.RESULT_OK;
 import static com.example.medicalai.MainActivity.HOST;
+import static com.example.medicalai.MainActivity.cameraButton2;
 
 public class DiseaseFragment extends Fragment {
 
@@ -49,6 +50,10 @@ public class DiseaseFragment extends Fragment {
     public static int fragm = 0; // 0 - Root, 1 - result
     public static View root;
     public static View result;
+
+    public static View manual;
+    public static View profile;
+
     public static ViewGroup cont;
 
     private String SERVER = HOST;
@@ -58,8 +63,13 @@ public class DiseaseFragment extends Fragment {
                              final ViewGroup container, Bundle savedInstanceState) {
 
         cont = container;
+        // Initializing the fragments
         root = inflater.inflate(R.layout.fragment_disease,container,false);
         result = inflater.inflate(R.layout.fragment_output,null,false);
+
+
+        manual = inflater.inflate(R.layout.fragment_manual,null,false);
+        profile = inflater.inflate(R.layout.fragment_settings,null,false);
 
         cameraButton = root.findViewById(R.id.cameraButton);
         uploadButton = root.findViewById(R.id.uploadButton);
@@ -67,6 +77,13 @@ public class DiseaseFragment extends Fragment {
         sendButton = root.findViewById(R.id.sendButton);
         cancelButton = root.findViewById(R.id.cancelButton);
         resultText = root.findViewById(R.id.resultText);
+
+        cameraButton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("TST","TST");
+            }
+        });
 
         cameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
