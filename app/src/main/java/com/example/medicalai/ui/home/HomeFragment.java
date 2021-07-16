@@ -7,11 +7,11 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.example.medicalai.R;
 
 import static com.example.medicalai.MainActivity.HOST;
-import static com.example.medicalai.MainActivity.cameraButton2;
 
 public class HomeFragment extends Fragment {
 
@@ -20,13 +20,27 @@ public class HomeFragment extends Fragment {
 
     public static View result;
 
-    public static View manual, profile, disease, root;
+    public static int lastFrag;
+    public static View manual, profile, disease, root, last;
 
     public static ViewGroup cont;
 
     private String SERVER = HOST;
     private final int CAMERA_CODE = 10, GALLERY_CODE = 11;
+    FragmentActivity myContext;
 
+
+//    Context context;
+//
+//    interface mydataBack {
+//        public void bringBackString(String stringSentBack);
+//    }
+//    @Override
+//    public void onAttach(Context context) {
+//        context=context;
+//        super.onAttach(context);
+//        mCallback = (listener) mActivity;
+//    }`
     public View onCreateView(@NonNull final LayoutInflater inflater,
                              final ViewGroup container, Bundle savedInstanceState) {
 
@@ -39,22 +53,14 @@ public class HomeFragment extends Fragment {
         manual = inflater.inflate(R.layout.fragment_manual,null,false);
         profile = inflater.inflate(R.layout.fragment_settings,null,false);
 
-
-
-        cameraButton2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-            }
-        });
+//        disease.getRootView().setVisibility(View.INVISIBLE);
 
         return root;
 
     }
 
-
 }
+
 
 
 

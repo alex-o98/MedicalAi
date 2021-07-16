@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.util.Base64;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -16,10 +15,13 @@ import java.util.HashMap;
 import java.util.Random;
 
 import static com.example.medicalai.HelperFunctions.hashMapToUrl;
-import static com.example.medicalai.ui.home.HomeFragment.out_fragm;
 import static com.example.medicalai.ui.disease.DiseaseFragment.accuracy;
 import static com.example.medicalai.ui.disease.DiseaseFragment.imgReturned;
 import static com.example.medicalai.ui.disease.DiseaseFragment.returnString;
+import static com.example.medicalai.ui.home.HomeFragment.cont;
+import static com.example.medicalai.ui.home.HomeFragment.disease;
+import static com.example.medicalai.ui.home.HomeFragment.out_fragm;
+import static com.example.medicalai.ui.home.HomeFragment.result;
 
 
 public class UploadImage extends AsyncTask<Void,Void,String> {
@@ -29,9 +31,7 @@ public class UploadImage extends AsyncTask<Void,Void,String> {
     private TextView view;
     public String SERVER;
     ViewGroup container;
-    View root;
-    View result;
-    public UploadImage(Bitmap image, String host, TextView view, Context context, final ViewGroup container, final View root, final View result){
+    public UploadImage(Bitmap image, String host, TextView view, Context context, final ViewGroup container){
         this.context = context;
         this.image = image;
         this.id = randomID();
@@ -39,8 +39,6 @@ public class UploadImage extends AsyncTask<Void,Void,String> {
         this.view = view;
 
         this.container = container;
-        this.root = root;
-        this.result = result;
 
         this.view.setText("Processing picture. Please wait");
 
@@ -139,8 +137,8 @@ public class UploadImage extends AsyncTask<Void,Void,String> {
     protected void onPostExecute(String s) {
         if(s!=null){
             // If everything worked out, we change to the output fragment
-            this.container.removeView(this.root);
-            this.container.addView(this.result);
+            cont.removeView(disease);
+            cont.addView(result);
             out_fragm = 1;
         }else{
             new AlertDialog.Builder(this.context)
