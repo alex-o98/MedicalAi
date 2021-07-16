@@ -1,7 +1,6 @@
 package com.example.medicalai;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,19 +18,22 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import static com.example.medicalai.ui.disease.DiseaseFragment.cameraButton;
 import static com.example.medicalai.ui.disease.DiseaseFragment.cancelButton;
-import static com.example.medicalai.ui.disease.DiseaseFragment.cont;
-import static com.example.medicalai.ui.disease.DiseaseFragment.fragm;
 import static com.example.medicalai.ui.disease.DiseaseFragment.imgTaken;
-import static com.example.medicalai.ui.disease.DiseaseFragment.manual;
-import static com.example.medicalai.ui.disease.DiseaseFragment.out_fragm;
-import static com.example.medicalai.ui.disease.DiseaseFragment.profile;
-import static com.example.medicalai.ui.disease.DiseaseFragment.result;
 import static com.example.medicalai.ui.disease.DiseaseFragment.resultText;
-import static com.example.medicalai.ui.disease.DiseaseFragment.root;
 import static com.example.medicalai.ui.disease.DiseaseFragment.sendButton;
 import static com.example.medicalai.ui.disease.DiseaseFragment.uploadButton;
+import static com.example.medicalai.ui.home.HomeFragment.cont;
+import static com.example.medicalai.ui.home.HomeFragment.disease;
+import static com.example.medicalai.ui.home.HomeFragment.fragm;
+import static com.example.medicalai.ui.home.HomeFragment.manual;
+import static com.example.medicalai.ui.home.HomeFragment.out_fragm;
+import static com.example.medicalai.ui.home.HomeFragment.profile;
+import static com.example.medicalai.ui.home.HomeFragment.result;
+import static com.example.medicalai.ui.home.HomeFragment.root;
 
-// Importing the contents from the DiseaseFragment so we can reset it
+//import static com.example.medicalai.ui.disease.DiseaseFragment.
+
+// Importing the contents from the HomeFragment so we can reset it
 
 public class MainActivity extends AppCompatActivity {
 
@@ -46,18 +48,18 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.miHome:
-                    Log.d("Nav","Home");
                     if(fragm != 0){
                         cont.addView(root);
+                        cont.removeView(disease);
                         cont.removeView(manual);
                         cont.removeView(profile);
                         fragm = 0;
                     }
                     break;
                 case R.id.miManual:
-                    Log.d("Nav","miManual");
                     if(fragm != 1){
                         cont.addView(manual);
+                        cont.removeView(disease);
                         cont.removeView(root);
                         cont.removeView(profile);
                         fragm = 1;
@@ -66,7 +68,8 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.miGallery:
                     if(fragm != 2){
-                        cont.addView(root);
+                        cont.addView(disease);
+                        cont.removeView(root);
                         cont.removeView(manual);
                         cont.removeView(profile);
                         fragm = 2;
@@ -75,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.miProfile:
                     if(out_fragm != 3){
                         cont.addView(profile);
+                        cont.removeView(disease);
                         cont.removeView(manual);
                         cont.removeView(root);
                         fragm = 3;

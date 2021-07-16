@@ -16,8 +16,8 @@ import java.util.HashMap;
 import java.util.Random;
 
 import static com.example.medicalai.HelperFunctions.hashMapToUrl;
+import static com.example.medicalai.ui.home.HomeFragment.out_fragm;
 import static com.example.medicalai.ui.disease.DiseaseFragment.accuracy;
-import static com.example.medicalai.ui.disease.DiseaseFragment.out_fragm;
 import static com.example.medicalai.ui.disease.DiseaseFragment.imgReturned;
 import static com.example.medicalai.ui.disease.DiseaseFragment.returnString;
 
