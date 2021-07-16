@@ -17,7 +17,7 @@ import java.util.Random;
 
 import static com.example.medicalai.HelperFunctions.hashMapToUrl;
 import static com.example.medicalai.ui.disease.DiseaseFragment.accuracy;
-import static com.example.medicalai.ui.disease.DiseaseFragment.fragm;
+import static com.example.medicalai.ui.disease.DiseaseFragment.out_fragm;
 import static com.example.medicalai.ui.disease.DiseaseFragment.imgReturned;
 import static com.example.medicalai.ui.disease.DiseaseFragment.returnString;
 
@@ -141,7 +141,7 @@ public class UploadImage extends AsyncTask<Void,Void,String> {
             // If everything worked out, we change to the output fragment
             this.container.removeView(this.root);
             this.container.addView(this.result);
-            fragm = 1;
+            out_fragm = 1;
         }else{
             new AlertDialog.Builder(this.context)
                     .setTitle("Server error")

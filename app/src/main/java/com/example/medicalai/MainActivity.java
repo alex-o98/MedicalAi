@@ -9,7 +9,6 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -24,6 +23,7 @@ import static com.example.medicalai.ui.disease.DiseaseFragment.cont;
 import static com.example.medicalai.ui.disease.DiseaseFragment.fragm;
 import static com.example.medicalai.ui.disease.DiseaseFragment.imgTaken;
 import static com.example.medicalai.ui.disease.DiseaseFragment.manual;
+import static com.example.medicalai.ui.disease.DiseaseFragment.out_fragm;
 import static com.example.medicalai.ui.disease.DiseaseFragment.profile;
 import static com.example.medicalai.ui.disease.DiseaseFragment.result;
 import static com.example.medicalai.ui.disease.DiseaseFragment.resultText;
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     break;
                 case R.id.miProfile:
-                    if(fragm != 3){
+                    if(out_fragm != 3){
                         cont.addView(profile);
                         cont.removeView(manual);
                         cont.removeView(root);
@@ -102,16 +102,6 @@ public class MainActivity extends AppCompatActivity {
 
         cameraButton2 = (FloatingActionButton) findViewById(R.id.cameraFloatingButton);
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_slideshow,
-                R.id.nav_tools)
-                .setDrawerLayout(drawer)
-                .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
 
     }
 
@@ -129,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(fragm == 1){
+        if(out_fragm == 1){
             // We are in the output part so we back to the root part if back is pressed
             cont.removeView(result);
             cont.addView(root);
@@ -146,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
             // Reset the text
             resultText.setText("");
 
-            fragm = 0;
+            out_fragm = 0;
         }
 
     }
