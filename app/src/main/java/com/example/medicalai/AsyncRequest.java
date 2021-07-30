@@ -1,7 +1,6 @@
 package com.example.medicalai;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 public class AsyncRequest extends AsyncTask<Void,Void,String> {
 
@@ -19,12 +18,13 @@ public class AsyncRequest extends AsyncTask<Void,Void,String> {
 
         try {
             String response = Request.post(SERVER,this.data);
-
-            Log.d("RESPONE:",""+response);
+            return response;
 
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
+
+
 }

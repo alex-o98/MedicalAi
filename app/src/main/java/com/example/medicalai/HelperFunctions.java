@@ -37,7 +37,7 @@ public class HelperFunctions {
 
             String encrypted_password = bigInt.toString(16);
 
-
+            return encrypted_password;
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }

@@ -1,5 +1,6 @@
 package com.example.medicalai;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -47,6 +48,10 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private AppCompatActivity app;
+
+    public static String email,string,age;
+
+
     public static String HOST = "http://192.168.100.2:5000";
     public static FloatingActionButton cameraButton2;
     public static DiseasePictures pictureManager;
@@ -156,6 +161,12 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.getMenu().getItem(2).setEnabled(false);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(selectedListener);
+
+        Intent intent = getIntent();
+
+        String email = intent.getStringExtra("email");
+        String gender = intent.getStringExtra("gender");
+        String age = intent.getStringExtra("age");
 
 //        home = new HomeFragment();
         man = new ManualFragment();

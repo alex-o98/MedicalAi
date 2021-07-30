@@ -65,15 +65,16 @@ public class UploadImage extends AsyncTask<Void,Void,String> {
 
             String response = Request.post(SERVER,dataToSend);
 
-            String acc = response.split(" ")[0];
-            String imageReceived = response.split(" ")[1];
+            String detected = response.split(" ")[0];
+            String acc = response.split(" ")[1];
+            String imageReceived = response.split(" ")[2];
 
             // Add the image in the imageView
             byte[] bImg = Base64.decode(imageReceived,Base64.DEFAULT);
 
             Bitmap bitmap = BitmapFactory.decodeByteArray(bImg , 0, bImg .length);
 
-            output(acc,bitmap);
+            output(detected,acc,bitmap);
 
 
         }catch (Exception e){
@@ -83,44 +84,62 @@ public class UploadImage extends AsyncTask<Void,Void,String> {
         return "";
     }
 
-    private void output(String acc,Bitmap bitmap){
+    private void output(String detected,String acc,Bitmap bitmap){
         // Setting the image with the one returned from the server
         imgReturned.setImageBitmap(bitmap);
 
         // Writing the accuracy in the format 99.9%. Right now is 0.999
         float a = Float.parseFloat(acc)*100;
         String returnAcc = String.valueOf(a)+"%";
-
+        int detection = Integer.parseInt(detected);
         // We have some cases to know how to color the text
         // and what output to write
         String out = "";
-        if(a < 20){
-            // Green - safe
-            accuracy.setTextColor(Color.GREEN);
-            out = "The server returned back a confidence of "+returnAcc+" that the "+
-                    "image contains a lesions. A confidence of less than 20% usually "+
-                    "means that the highlighted area is benign\n\n"+
-                    "If the image does not highlight any area that means that it is likely the server "+
-                    "did not see the spot on the skin correctly. If so, try again by taking another picture " +
-                    "in a different way.\n\n" +
-                    "Please note that this result does not take place of a specialist's opinion, and should be used only " +
-                    "as a guidance rather than a diagnostic";
-        }else if(a>=20 && a<65){
-            // Yellow - be aware
-            accuracy.setTextColor(Color.YELLOW);
-            out = "The server returned back a confidence of "+returnAcc+" that the "+
-                    "image contains a lesions. A confidence higher than 20% and less than 65% usually "+
-                    "means that the highlighted area might be malignant\n\n"+
-                    "If the image does not highlight any area that means that it is likely the server "+
-                    "did not see the spot on the skin correctly. If so, try again by taking another picture " +
-                    "in a different way.\n\n" +
-                    "Please note that this result does not take place of a specialist's opinion, and should be used only " +
-                    "as a guidance rather than a diagnostic";
-        }else if(a>=65){
+
+        // We have two cases, if what has been detected is more likely to be safe or not
+        if(detection == 0){
+            // Safe
+
+            if(a<60) {
+                accuracy.setTextColor(Color.YELLOW);
+                out = "The server returned back a confidence of "+returnAcc+" that the "+
+                        "image contains no lesion. This means that the highlighted area might be benign, but " +
+                        "it is not really sure.\n\n"+
+                        "If the image does not highlight any area that means that it is likely the server "+
+                        "did not see the spot on the skin correctly. If so, try again by taking another picture " +
+                        "in a different way.\n\n" +
+                        "Please note that this result does not take place of a specialist's opinion, and should be used only " +
+                        "as a guidance rather than a diagnostic";
+            }else{
+                accuracy.setTextColor(Color.GREEN);
+                out = "The server returned back a confidence of "+returnAcc+" that the "+
+                        "image contains a lesions. You should not worry about it, as it most likely " +
+                        "means that the highlighted area is benign\n\n"+
+                        "If the image does not highlight any area that means that it is likely the server "+
+                        "did not see the spot on the skin correctly. If so, try again by taking another picture " +
+                        "in a different way.\n\n" +
+                        "Please note that this result does not take place of a specialist's opinion, and should be used only " +
+                        "as a guidance rather than a diagnostic";
+            }
+
+        }if(detection == 1){
+            // Not safe
+
+            if(a<60) {
+                accuracy.setTextColor(Color.YELLOW);
+                out = "The server returned back a confidence of "+returnAcc+" that the "+
+                        "image contains a lesion. This means that the highlighted area might be malignant, but " +
+                        "it is not really sure.\n\n"+
+                        "If the image does not highlight any area that means that it is likely the server "+
+                        "did not see the spot on the skin correctly. If so, try again by taking another picture " +
+                        "in a different way.\n\n" +
+                        "Please note that this result does not take place of a specialist's opinion, and should be used only " +
+                        "as a guidance rather than a diagnostic";
+            }
             // Red - most likely there is something wrong
             accuracy.setTextColor(Color.RED);
             out = "The server returned back a confidence of "+returnAcc+" that the "+
-                    "image contains a lesions. A confidence higher than 65% usually "+
+                    "image contains a lesions. A confidence this high usually "+
                     "means that the highlighted area is very likely to be malignant\n\n"+
                     "If the image does not highlight any area that means that it is likely the server "+
                     "did not see the spot on the skin correctly. If so, try again by taking another picture " +
@@ -128,6 +147,10 @@ public class UploadImage extends AsyncTask<Void,Void,String> {
                     "Please note that this result does not take place of a specialist's opinion, and should be used only " +
                     "as a guidance rather than a diagnostic";
         }
+
+
+
+
         accuracy.setText(returnAcc);
         returnString.setText(out);
 
