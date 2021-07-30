@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -21,13 +23,15 @@ public class HomeFragment extends Fragment {
     public static View result;
 
     public static int lastFrag;
-    public static View manual, profile, disease, root, last;
+    public static View manual, profile, disease, root, last, gallery,bu_gallery;
 
     public static ViewGroup cont;
 
     private String SERVER = HOST;
     private final int CAMERA_CODE = 10, GALLERY_CODE = 11;
     FragmentActivity myContext;
+    Button add;
+    public static LinearLayout linearLayout;
 
 
 //    Context context;
@@ -52,7 +56,7 @@ public class HomeFragment extends Fragment {
         disease = inflater.inflate(R.layout.fragment_disease,container,false);
         manual = inflater.inflate(R.layout.fragment_manual,null,false);
         profile = inflater.inflate(R.layout.fragment_settings,null,false);
-
+        gallery = inflater.inflate(R.layout.fragment_gallery,null,false);
 //        disease.getRootView().setVisibility(View.INVISIBLE);
 
         return root;

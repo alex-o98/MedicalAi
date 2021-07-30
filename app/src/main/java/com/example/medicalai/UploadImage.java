@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Random;
 
 import static com.example.medicalai.HelperFunctions.hashMapToUrl;
+import static com.example.medicalai.MainActivity.email;
 import static com.example.medicalai.ui.disease.DiseaseFragment.accuracy;
 import static com.example.medicalai.ui.disease.DiseaseFragment.imgReturned;
 import static com.example.medicalai.ui.disease.DiseaseFragment.returnString;
@@ -34,7 +35,6 @@ public class UploadImage extends AsyncTask<Void,Void,String> {
     public UploadImage(Bitmap image, String host, TextView view, Context context, final ViewGroup container){
         this.context = context;
         this.image = image;
-        this.id = randomID();
         this.SERVER = host;
         this.view = view;
 
@@ -53,7 +53,7 @@ public class UploadImage extends AsyncTask<Void,Void,String> {
         String imageEncoded = Base64.encodeToString(b, Base64.DEFAULT);
 
         HashMap<String,String> detail = new HashMap<>();
-        detail.put("id", id);
+        detail.put("email",email);
         detail.put("image", imageEncoded);
 
         try{
@@ -64,18 +64,15 @@ public class UploadImage extends AsyncTask<Void,Void,String> {
             // to get them.
 
             String response = Request.post(SERVER,dataToSend);
-
             String detected = response.split(" ")[0];
+
             String acc = response.split(" ")[1];
             String imageReceived = response.split(" ")[2];
 
             // Add the image in the imageView
             byte[] bImg = Base64.decode(imageReceived,Base64.DEFAULT);
-
-            Bitmap bitmap = BitmapFactory.decodeByteArray(bImg , 0, bImg .length);
-
+            Bitmap bitmap = BitmapFactory.decodeByteArray(bImg , 0, bImg.length);
             output(detected,acc,bitmap);
-
 
         }catch (Exception e){
             e.printStackTrace();

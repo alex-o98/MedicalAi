@@ -38,6 +38,7 @@ import static com.example.medicalai.MainActivity.resetOutput;
 import static com.example.medicalai.ui.home.HomeFragment.cont;
 import static com.example.medicalai.ui.home.HomeFragment.disease;
 import static com.example.medicalai.ui.home.HomeFragment.fragm;
+import static com.example.medicalai.ui.home.HomeFragment.gallery;
 import static com.example.medicalai.ui.home.HomeFragment.last;
 import static com.example.medicalai.ui.home.HomeFragment.lastFrag;
 import static com.example.medicalai.ui.home.HomeFragment.manual;
@@ -136,7 +137,6 @@ public class DiseaseFragment extends Fragment {
         accuracy = result.findViewById(R.id.accuracyTextView);
         returnString = result.findViewById(R.id.resultStringTextView);
 
-
         cameraButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -155,6 +155,9 @@ public class DiseaseFragment extends Fragment {
                 }else if(fragm == 3){
                     last = profile;
                     lastFrag = 3;
+                }else if(fragm == 2){
+                    last = gallery;
+                    lastFrag = 2;
                 }
                 if(out_fragm == 1){
                     resetOutput();
@@ -197,9 +200,6 @@ public class DiseaseFragment extends Fragment {
     public void addDiseaseView(){
         cont.addView(disease);
         cont.removeView(last);
-    }
-    public void change(){
-        resultText.setText("TEST");
     }
 
     private void showButtons(){

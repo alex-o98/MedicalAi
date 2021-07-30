@@ -13,7 +13,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:fontFamily="@font/roboto"
-        android:text="Settings"
+        android:text="Profile"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="#000000"
@@ -27,7 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="49dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="184dp"
         android:backgroundTint="@color/colorPrimaryDark"
         android:ems="10"
         android:hint="Server IP"
@@ -41,10 +41,12 @@
         android:id="@+id/getIPButton"
         android:layout_width="150dp"
         android:layout_height="49dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="184dp"
         android:background="@drawable/button_style_one"
         android:text="Change"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.542"
         app:layout_constraintStart_toEndOf="@+id/newIp"
         app:layout_constraintTop_toBottomOf="@+id/text_tools" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
