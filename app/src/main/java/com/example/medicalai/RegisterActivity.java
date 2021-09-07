@@ -3,6 +3,7 @@ package com.example.medicalai;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -30,9 +31,9 @@ import static com.example.medicalai.HelperFunctions.hashMapToUrl;
 import static com.example.medicalai.MainActivity.HOST;
 
 public class RegisterActivity extends AppCompatActivity {
-    TextView email,password;
+    TextView email,password,fname,lname;
     Button registerButton,ageButton;
-    ImageButton back;
+    ImageButton backButton;
     RadioButton male,female;
     RadioGroup rg;
     CheckBox tnc;
@@ -49,12 +50,15 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        fname = findViewById(R.id.fnameText);
+        lname = findViewById(R.id.lnameText);
         email = (TextView) findViewById(R.id.emailText);
         password = (TextView) findViewById(R.id.passwordText);
+
         rg = (RadioGroup) findViewById(R.id.radio);
         registerButton = (Button) findViewById(R.id.createButton);
         ageButton = findViewById(R.id.ageButton);
-
+        backButton = findViewById(R.id.backButton);
         male = findViewById(R.id.maleButton);
         female = findViewById(R.id.femaleButton);
 
@@ -84,6 +88,15 @@ public class RegisterActivity extends AppCompatActivity {
                         cal.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
+        backButton.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         registerButton.setOnClickListener(new View.OnClickListener(){
             String em = "", passw = "";
@@ -94,6 +107,14 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(View view) {
                 try {
                     em = email.getText().toString();
+                    String fn = fname.getText().toString();
+                    String ln = lname.getText().toString();
+                    if(fn.equals("")){
+                        throw new Exception("All fields need to be entered");
+                    }
+                    if(ln.equals("")){
+                        throw new Exception("All fields need to be entered");
+                    }
                     if(em.equals("")){
                         throw new Exception("All fields need to be entered");
                     }else if(!em.contains("@") || !em.contains(".")){
@@ -128,14 +149,14 @@ public class RegisterActivity extends AppCompatActivity {
                     Log.d("Info", String.valueOf(gender));
 
 
-
                     // Values to send: em passw age gender
                     HashMap<String,String> detail = new HashMap<>();
                     detail.put("email", em);
                     detail.put("password", passw);
                     detail.put("age",age);
                     detail.put("gender",String.valueOf(gender));
-
+                    detail.put("fname",fname.getText().toString());
+                    detail.put("lname",lname.getText().toString());
 
                     try {
                         String dataToSend = hashMapToUrl(detail);
@@ -148,6 +169,8 @@ public class RegisterActivity extends AppCompatActivity {
                             String email = response.split("%")[1];
                             String dob = response.split("%")[2];
                             String gender = response.split("%")[3];
+                            String fname = response.split("%")[4];
+                            String lname = response.split("%")[5];
 
                             int d = Integer.parseInt(dob.split("\\.")[0]);
                             int m = Integer.parseInt(dob.split("\\.")[1]);
@@ -156,10 +179,18 @@ public class RegisterActivity extends AppCompatActivity {
                             int age = getAge(d,m,y);
                             Integer x = age;
 
+                            SharedPreferences loginPrefference = getApplicationContext().getSharedPreferences("loginInfo",MODE_PRIVATE);
+                            SharedPreferences.Editor edit = loginPrefference.edit();
+                            edit.putString("email",email);
+                            edit.putString("gender",gender);
+                            edit.putString("age",x.toString());
+                            edit.putString("fname",fn);
+                            edit.putString("lname",ln);
+
+                            edit.apply();
+
                             Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
-                            myIntent.putExtra("email", email);
-                            myIntent.putExtra("gender", gender);
-                            myIntent.putExtra("age", x.toString());
+
                             startActivity(myIntent);
                             finish();
                         }else{

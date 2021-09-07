@@ -57,7 +57,7 @@ public class DiseaseFragment extends Fragment {
 
     public static ImageView imgReturned;
     public static TextView accuracy;
-    public static TextView returnString;
+    public static TextView returnString, resultView;
 
 
     public static Bitmap bitmap;
@@ -136,6 +136,8 @@ public class DiseaseFragment extends Fragment {
 
         accuracy = result.findViewById(R.id.accuracyTextView);
         returnString = result.findViewById(R.id.resultStringTextView);
+        resultView = result.findViewById(R.id.resultView);
+
 
         cameraButton2.setOnClickListener(new View.OnClickListener() {
             @Override

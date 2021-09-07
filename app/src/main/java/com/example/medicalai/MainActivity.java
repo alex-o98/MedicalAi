@@ -2,6 +2,7 @@ package com.example.medicalai;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -32,7 +33,8 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.medicalai.ui.disease.DiseaseFragment;
 import com.example.medicalai.ui.disease.DiseasePictures;
 import com.example.medicalai.ui.manual.ManualFragment;
-import com.example.medicalai.ui.settings.SettingsFragment;
+import com.example.medicalai.ui.settings.ProfileFragment;
+import com.github.mikephil.charting.charts.BarChart;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -66,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private AppCompatActivity app;
 
-    public static String email,gender,age;
+    public static String email,gender,age,fname,lname;
 
 
     public static String HOST = "http://192.168.100.2:5000";
@@ -127,8 +129,11 @@ public class MainActivity extends AppCompatActivity {
                 String imageReceived = temp[0];
                 String date= temp[1];
                 String result = temp[2];
-                String accuracy = temp[3];
 
+                String accuracy = temp[3];
+                float tmp = Float.parseFloat(accuracy);
+                tmp = tmp*100;
+                accuracy = Float.toString(tmp);
 
 
                 byte[] bImg = Base64.decode(imageReceived,Base64.DEFAULT);
@@ -260,7 +265,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
     };
-
+    public static BarChart barChart;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -280,14 +285,25 @@ public class MainActivity extends AppCompatActivity {
         email = intent.getStringExtra("email");
         gender = intent.getStringExtra("gender");
         age = intent.getStringExtra("age");
+
+        SharedPreferences login;
+        login = this.getSharedPreferences("loginInfo", MODE_PRIVATE);
+        email = login.getString("email","");
+        gender = login.getString("gender","");
+        age = login.getString("age","");
+        fname = login.getString("fname","");
+        lname = login.getString("lname","");
+
         email = "admin@test.com";
         gender = "0";
         age = "23.07.1998";
 
+        Log.d("fname",fname);
+        Log.d("lname",lname);
 //        home = new HomeFragment();
         man = new ManualFragment();
         dis = new DiseaseFragment();
-        prof = new SettingsFragment();
+        prof = new ProfileFragment();
         // Initializing the fragments
 
         addFragment(dis);
@@ -300,8 +316,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
     }
+
     public void resetGalleryFragment(){
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         gallery = inflater.inflate(R.layout.fragment_gallery,null,false);

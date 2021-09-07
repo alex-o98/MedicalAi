@@ -2,6 +2,7 @@ package com.example.medicalai;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -26,7 +27,6 @@ public class LoginActivity extends AppCompatActivity {
     TextView email,password;
     Button loginButton,registerButton;
     public String SERVER = HOST+"/login";
-
 
 
     @Override
@@ -64,6 +64,9 @@ public class LoginActivity extends AppCompatActivity {
                         String email = response.split("%")[1];
                         String dob = response.split("%")[2];
                         String gender = response.split("%")[3];
+                        String fname = response.split("%")[4];
+                        String lname = response.split("%")[5];
+
 
                         int d = Integer.parseInt(dob.split("\\.")[0]);
                         int m = Integer.parseInt(dob.split("\\.")[1]);
@@ -72,10 +75,19 @@ public class LoginActivity extends AppCompatActivity {
                         int age = getAge(d,m,y);
                         Integer x = age;
 
+
+
+                        SharedPreferences loginPrefference = getApplicationContext().getSharedPreferences("loginInfo",MODE_PRIVATE);
+                        SharedPreferences.Editor edit = loginPrefference.edit();
+                        edit.putString("email",email);
+                        edit.putString("gender",gender);
+                        edit.putString("age",x.toString());
+                        edit.putString("fname",fname);
+                        edit.putString("lname",lname);
+
+                        edit.apply();
+
                         Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
-                        myIntent.putExtra("email", email);
-                        myIntent.putExtra("gender", gender);
-                        myIntent.putExtra("age", x.toString());
                         startActivity(myIntent);
                         finish();
                     }else{
@@ -99,6 +111,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v){
                 Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 

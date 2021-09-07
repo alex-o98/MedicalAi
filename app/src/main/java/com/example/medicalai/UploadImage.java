@@ -18,6 +18,7 @@ import static com.example.medicalai.HelperFunctions.hashMapToUrl;
 import static com.example.medicalai.MainActivity.email;
 import static com.example.medicalai.ui.disease.DiseaseFragment.accuracy;
 import static com.example.medicalai.ui.disease.DiseaseFragment.imgReturned;
+import static com.example.medicalai.ui.disease.DiseaseFragment.resultView;
 import static com.example.medicalai.ui.disease.DiseaseFragment.returnString;
 import static com.example.medicalai.ui.home.HomeFragment.cont;
 import static com.example.medicalai.ui.home.HomeFragment.disease;
@@ -64,10 +65,10 @@ public class UploadImage extends AsyncTask<Void,Void,String> {
             // to get them.
 
             String response = Request.post(SERVER,dataToSend);
-            String detected = response.split(" ")[0];
+            String detected = response.split("%")[0];
 
-            String acc = response.split(" ")[1];
-            String imageReceived = response.split(" ")[2];
+            String acc = response.split("%")[1];
+            String imageReceived = response.split("%")[2];
 
             // Add the image in the imageView
             byte[] bImg = Base64.decode(imageReceived,Base64.DEFAULT);
@@ -88,70 +89,106 @@ public class UploadImage extends AsyncTask<Void,Void,String> {
         // Writing the accuracy in the format 99.9%. Right now is 0.999
         float a = Float.parseFloat(acc)*100;
         String returnAcc = String.valueOf(a)+"%";
-        int detection = Integer.parseInt(detected);
+
         // We have some cases to know how to color the text
-        // and what output to write
         String out = "";
 
-        // We have two cases, if what has been detected is more likely to be safe or not
-        if(detection == 0){
-            // Safe
-
-            if(a<60) {
-                accuracy.setTextColor(Color.YELLOW);
-                out = "The server returned back a confidence of "+returnAcc+" that the "+
-                        "image contains no lesion. This means that the highlighted area might be benign, but " +
-                        "it is not really sure.\n\n"+
-                        "If the image does not highlight any area that means that it is likely the server "+
-                        "did not see the spot on the skin correctly. If so, try again by taking another picture " +
-                        "in a different way.\n\n" +
-                        "Please note that this result does not take place of a specialist's opinion, and should be used only " +
-                        "as a guidance rather than a diagnostic";
-            }else{
+        // Benign
+        switch (detected) {
+            case "Keratosis-like lesion":
                 accuracy.setTextColor(Color.GREEN);
-                out = "The server returned back a confidence of "+returnAcc+" that the "+
-                        "image contains a lesions. You should not worry about it, as it most likely " +
-                        "means that the highlighted area is benign\n\n"+
-                        "If the image does not highlight any area that means that it is likely the server "+
+                out += "The server returned back a confidence of " + returnAcc + " that the " +
+                        "image contains a Keratosis-like lesion. This lesion is a noncancerous one (benign) " +
+                        "and there is nothing to worry about it, as they can not become harmful, and in fact " +
+                        "most of the people develop one in their lifetime. Because of this, it does not need to be removed\n\n" +
+                        "If the image does not highlight any area that means that it is likely the server " +
                         "did not see the spot on the skin correctly. If so, try again by taking another picture " +
                         "in a different way.\n\n" +
                         "Please note that this result does not take place of a specialist's opinion, and should be used only " +
                         "as a guidance rather than a diagnostic";
-            }
-
-        }if(detection == 1){
-            // Not safe
-
-            if(a<60) {
+                break;
+            case "Melanocytic nevi":
+                accuracy.setTextColor(Color.GREEN);
+                out += "The server returned back a confidence of " + returnAcc + " that the " +
+                        "image contains a Melanocytic nevi, also called as a mole. This lesion is a noncancerous one (benign) " +
+                        "and is due to a local proliferation of pigment cells. However, about 25% of melanomas develop from moles, " +
+                        "so if you see something strange about it or you have seen it develop over time, you should seek a doctor, " +
+                        "otherwise it does not need to be removed\n\n" +
+                        "If the image does not highlight any area that means that it is likely the server " +
+                        "did not see the spot on the skin correctly. If so, try again by taking another picture " +
+                        "in a different way.\n\n" +
+                        "Please note that this result does not take place of a specialist's opinion, and should be used only " +
+                        "as a guidance rather than a diagnostic";
+                break;
+            case "Dermatofibroma":
+                accuracy.setTextColor(Color.GREEN);
+                out += "The server returned back a confidence of " + returnAcc + " that the " +
+                        "image contains a Dermatofibroma. This lesion is a noncancerous one (benign) " +
+                        "and it has no chances of creating complications, due to the fact that it was most likely " +
+                        "created after a minor trauma of the skin from insect bites, injections, or other stuff similar. " +
+                        "Because of this, it is not needed to be removed or treated\n\n" +
+                        "If the image does not highlight any area that means that it is likely the server " +
+                        "did not see the spot on the skin correctly. If so, try again by taking another picture " +
+                        "in a different way.\n\n" +
+                        "Please note that this result does not take place of a specialist's opinion, and should be used only " +
+                        "as a guidance rather than a diagnostic";
+                break;
+            case "Melanoma":
+                accuracy.setTextColor(Color.RED);
+                out += "The server returned back a confidence of " + returnAcc + " that the " +
+                        "image contains a Melanoma. This lesion is a cancerous one (malignant) " +
+                        "and it is recommended to go to the doctor as fast as possible. Depending on it's stage " +
+                        "and how early it is detected, it can be harmless\n\n" +
+                        "If the image does not highlight any area that means that it is likely the server " +
+                        "did not see the spot on the skin correctly. If so, try again by taking another picture " +
+                        "in a different way.\n\n" +
+                        "Please note that this result does not take place of a specialist's opinion, and should be used only " +
+                        "as a guidance rather than a diagnostic";
+                break;
+            case "Vascular lesion":
+                accuracy.setTextColor(Color.GREEN);
+                out += "The server returned back a confidence of " + returnAcc + " that the " +
+                        "image contains a Vascular lesion. This lesion is a noncancerous one (benign) " +
+                        "and it has no chances of creating complications.\n\n" +
+                        "If the image does not highlight any area that means that it is likely the server " +
+                        "did not see the spot on the skin correctly. If so, try again by taking another picture " +
+                        "in a different way.\n\n" +
+                        "Please note that this result does not take place of a specialist's opinion, and should be used only " +
+                        "as a guidance rather than a diagnostic";
+                break;
+            case "Basal cell carcinoma":
+                accuracy.setTextColor(Color.RED);
+                out += "The server returned back a confidence of " + returnAcc + " that the " +
+                        "image contains a Basal cell carcinoma. This lesion is a noncancerous one (benign) " +
+                        "and because it grows slowly, it is easy to treat. However, patients with multiple Basal cell carcinoma" +
+                        "diagnostics are more likely to develop other malignancies, so you should seek a doctor if this is not your first one." +
+                        "The lesion needs to be treated so you should go to the doctor\n\n" +
+                        "If the image does not highlight any area that means that it is likely the server " +
+                        "did not see the spot on the skin correctly. If so, try again by taking another picture " +
+                        "in a different way.\n\n" +
+                        "Please note that this result does not take place of a specialist's opinion, and should be used only " +
+                        "as a guidance rather than a diagnostic";
+                break;
+            case "Actinic keratosis":
                 accuracy.setTextColor(Color.YELLOW);
-                out = "The server returned back a confidence of "+returnAcc+" that the "+
-                        "image contains a lesion. This means that the highlighted area might be malignant, but " +
-                        "it is not really sure.\n\n"+
-                        "If the image does not highlight any area that means that it is likely the server "+
+                out += "The server returned back a confidence of " + returnAcc + " that the " +
+                        "image contains a Actinic keratosis. This lesion is often categorized as precancer. " +
+                        "It is not life-threatening, and if treated early they do not have the chance to develop into skin cancer." +
+                        "The lesion needs to be treated so you should go to the doctor\n\n" +
+                        "If the image does not highlight any area that means that it is likely the server " +
                         "did not see the spot on the skin correctly. If so, try again by taking another picture " +
                         "in a different way.\n\n" +
                         "Please note that this result does not take place of a specialist's opinion, and should be used only " +
                         "as a guidance rather than a diagnostic";
-            }
-            // Red - most likely there is something wrong
-            accuracy.setTextColor(Color.RED);
-            out = "The server returned back a confidence of "+returnAcc+" that the "+
-                    "image contains a lesions. A confidence this high usually "+
-                    "means that the highlighted area is very likely to be malignant\n\n"+
-                    "If the image does not highlight any area that means that it is likely the server "+
-                    "did not see the spot on the skin correctly. If so, try again by taking another picture " +
-                    "in a different way.\n\n" +
-                    "Please note that this result does not take place of a specialist's opinion, and should be used only " +
-                    "as a guidance rather than a diagnostic";
+                break;
         }
 
-
-
-
         accuracy.setText(returnAcc);
+        resultView.setText(detected);
         returnString.setText(out);
 
     }
+
 
     @Override
     protected void onPostExecute(String s) {

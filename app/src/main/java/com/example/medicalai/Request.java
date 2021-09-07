@@ -17,8 +17,8 @@ public class Request {
         try {
             URL url = new URL(serverUrl);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            con.setConnectTimeout(1000 * 30);
-            con.setReadTimeout(1000 * 30);
+            con.setConnectTimeout(1000 * 15);
+            con.setReadTimeout(1000 * 15);
             con.setRequestMethod("POST");
             con.setDoOutput(true);
             OutputStream os = con.getOutputStream();
